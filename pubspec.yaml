@@ -1,5 +1,5 @@
 name: currency_exchanger
-description: "A new Flutter project."
+description: "BRL exchange-rate app: current rate and 30-day history for a given currency."
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -7,13 +7,20 @@ environment:
   sdk: ^3.12.2
 
 dependencies:
+  dio: ^5.10.0
+  equatable: ^2.1.0
   flutter:
     sdk: flutter
+  flutter_bloc: ^9.1.1
+  get_it: ^9.2.1
+  intl: ^0.20.3
 
 dev_dependencies:
+  bloc_test: ^10.0.0
+  flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
+  mocktail: ^1.0.5
 
 flutter:
   uses-material-design: true
