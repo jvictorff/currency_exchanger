@@ -1,12 +1,13 @@
 import '../entities/daily_rate.dart';
 import '../entities/daily_rate_with_diff.dart';
 
-/// Calcula o `close diff` de cada dia: a diferença entre o fechamento do dia e
-/// o do dia anterior.
+/// Calcula o `close diff` de cada dia: a variação do fechamento em relação ao
+/// dia anterior, tanto em valor absoluto quanto em percentual.
 ///
 /// Regras:
 /// - ordena por data (ascendente) antes de calcular — não confia na ordem da API;
-/// - o dia mais antigo fica com `closeDiff == null` (não há anterior);
+/// - o dia mais antigo fica com as diferenças `null` (não há anterior);
+/// - percentual = null quando o fechamento anterior é 0 (evita divisão por zero);
 /// - a lista de entrada NÃO é modificada (trabalha sobre uma cópia);
 /// - devolve do mais recente para o mais antigo (ordem de exibição).
 List<DailyRateWithDiff> computeCloseDiffs(List<DailyRate> rates) {
@@ -16,10 +17,22 @@ List<DailyRateWithDiff> computeCloseDiffs(List<DailyRate> rates) {
 
   final withDiff = <DailyRateWithDiff>[];
   for (var i = 0; i < ascending.length; i++) {
-    final closeDiff = i == 0
-        ? null
-        : ascending[i].close - ascending[i - 1].close;
-    withDiff.add(DailyRateWithDiff(rate: ascending[i], closeDiff: closeDiff));
+    if (i == 0) {
+      withDiff.add(DailyRateWithDiff(rate: ascending[i]));
+      continue;
+    }
+
+    final previousClose = ascending[i - 1].close;
+    final diff = ascending[i].close - previousClose;
+    final percent = previousClose == 0 ? null : diff / previousClose * 100;
+
+    withDiff.add(
+      DailyRateWithDiff(
+        rate: ascending[i],
+        closeDiff: diff,
+        closeDiffPercent: percent,
+      ),
+    );
   }
 
   return withDiff.reversed.toList();

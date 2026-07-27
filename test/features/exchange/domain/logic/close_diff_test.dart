@@ -17,14 +17,15 @@ void main() {
       expect(computeCloseDiffs(const []), isEmpty);
     });
 
-    test('dia único tem closeDiff nulo (não há anterior)', () {
+    test('dia único não tem diferença (absoluta nem percentual)', () {
       final result = computeCloseDiffs([day('2026-07-01', 5.0)]);
 
       expect(result, hasLength(1));
       expect(result.single.closeDiff, isNull);
+      expect(result.single.closeDiffPercent, isNull);
     });
 
-    test('calcula a diferença e devolve do mais recente ao mais antigo', () {
+    test('calcula absoluto e percentual, do mais recente ao mais antigo', () {
       final input = [
         day('2026-07-01', 5.00),
         day('2026-07-02', 5.10),
@@ -40,10 +41,29 @@ void main() {
         DateTime.parse('2026-07-01'),
       ]);
 
-      // 03: 5.05 - 5.10 = -0.05 | 02: 5.10 - 5.00 = 0.10 | 01: sem anterior
+      // 03: close 5.05 vs 5.10 => -0.05 abs | -0.9804% percentual
       expect(result[0].closeDiff, closeTo(-0.05, 1e-9));
+      expect(result[0].closeDiffPercent, closeTo(-0.980392, 1e-6));
+
+      // 02: close 5.10 vs 5.00 => +0.10 abs | +2.0% percentual
       expect(result[1].closeDiff, closeTo(0.10, 1e-9));
+      expect(result[1].closeDiffPercent, closeTo(2.0, 1e-9));
+
+      // 01: sem anterior
       expect(result[2].closeDiff, isNull);
+      expect(result[2].closeDiffPercent, isNull);
+    });
+
+    test('percentual é null quando o fechamento anterior é zero', () {
+      final input = [day('2026-07-01', 0.0), day('2026-07-02', 5.0)];
+
+      final result = computeCloseDiffs(input);
+      final second = result.firstWhere(
+        (e) => e.rate.date == DateTime.parse('2026-07-02'),
+      );
+
+      expect(second.closeDiff, closeTo(5.0, 1e-9)); // absoluto ainda existe
+      expect(second.closeDiffPercent, isNull); // percentual não (evita ÷0)
     });
 
     test('ordena entradas fora de ordem antes de calcular', () {
