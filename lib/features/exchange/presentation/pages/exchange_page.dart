@@ -8,6 +8,7 @@ import '../cubit/current_rate_cubit.dart';
 import '../cubit/history_cubit.dart';
 import '../widgets/current_rate_card.dart';
 import '../widgets/failure_view.dart';
+import '../widgets/history_sliver.dart';
 
 class ExchangePage extends StatelessWidget {
   const ExchangePage({super.key});
@@ -54,30 +55,41 @@ class _ExchangeViewState extends State<ExchangeView> {
         child: Column(
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 480),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const _Header(),
-                          const SizedBox(height: 24),
-                          _CurrencyField(
-                            controller: _controller,
-                            onSubmitted: (_) => _search(),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 480),
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const _Header(),
+                              const SizedBox(height: 24),
+                              _CurrencyField(
+                                controller: _controller,
+                                onSubmitted: (_) => _search(),
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton(
+                                onPressed: _search,
+                                child: const Text('EXCHANGE RESULT'),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: _search,
-                            child: const Text('EXCHANGE RESULT'),
-                          ),
-                          const _CurrentRateSection(),
-                        ],
+                        ),
                       ),
-                    ),
+                      const SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: _CurrentRateSection(),
+                        ),
+                      ),
+                      const _HistorySliverArea(),
+                      const SliverToBoxAdapter(child: SizedBox(height: 20)),
+                    ],
                   ),
                 ),
               ),
@@ -162,6 +174,22 @@ class _CurrentRateSection extends StatelessWidget {
     );
   }
 }
+class _HistorySliverArea extends StatelessWidget {
+  const _HistorySliverArea();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CurrentRateCubit, CurrentRateState>(
+      builder: (context, state) => state is CurrentRateLoaded
+          // key por moeda: ao trocar de moeda, a seção nasce recolhida de novo.
+          ? HistorySliver(
+              key: ValueKey(state.rate.fromSymbol),
+              currency: state.rate.fromSymbol,
+            )
+          : const SliverToBoxAdapter(child: SizedBox.shrink()),
+    );
+  }
+}
 
 class _Footer extends StatelessWidget {
   const _Footer();
@@ -175,7 +203,7 @@ class _Footer extends StatelessWidget {
       child: const Text(
         'Copyright · Action Labs',
         textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white, fontSize: 14),
+        style: TextStyle(color: Colors.white, fontSize: 12),
       ),
     );
   }

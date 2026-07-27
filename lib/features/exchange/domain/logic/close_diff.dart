@@ -9,8 +9,10 @@ import '../entities/daily_rate_with_diff.dart';
 /// - o dia mais antigo fica com as diferenças `null` (não há anterior);
 /// - percentual = null quando o fechamento anterior é 0 (evita divisão por zero);
 /// - a lista de entrada NÃO é modificada (trabalha sobre uma cópia);
-/// - devolve do mais recente para o mais antigo (ordem de exibição).
-List<DailyRateWithDiff> computeCloseDiffs(List<DailyRate> rates) {
+/// - devolve do mais recente para o mais antigo (ordem de exibição);
+/// - [limit]: se informado, devolve só os N mais recentes. O corte é feito
+///   APÓS o cálculo, então o diff do dia-limite ainda usa o dia anterior real.
+List<DailyRateWithDiff> computeCloseDiffs(List<DailyRate> rates, {int? limit}) {
   if (rates.isEmpty) return const [];
 
   final ascending = [...rates]..sort((a, b) => a.date.compareTo(b.date));
@@ -35,5 +37,7 @@ List<DailyRateWithDiff> computeCloseDiffs(List<DailyRate> rates) {
     );
   }
 
-  return withDiff.reversed.toList();
+  final descending = withDiff.reversed.toList();
+  if (limit == null || limit >= descending.length) return descending;
+  return descending.take(limit).toList();
 }

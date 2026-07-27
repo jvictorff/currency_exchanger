@@ -43,13 +43,16 @@ final class HistoryError extends HistoryState {
 class HistoryCubit extends Cubit<HistoryState> {
   HistoryCubit(this._repository) : super(const HistoryInitial());
 
+  /// Quantos dias exibir. Spec: "last 30 days" (assumido: 30 registros mais recentes).
+  static const int _historyDays = 30;
+
   final ExchangeRepository _repository;
 
   Future<void> load(String currency) async {
     emit(const HistoryLoading());
     try {
       final rates = await _repository.getDailyRates(currency);
-      emit(HistoryLoaded(computeCloseDiffs(rates)));
+      emit(HistoryLoaded(computeCloseDiffs(rates, limit: _historyDays)));
     } on Failure catch (failure) {
       emit(HistoryError(failure));
     }

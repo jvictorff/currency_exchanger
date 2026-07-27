@@ -66,6 +66,22 @@ void main() {
       expect(second.closeDiffPercent, isNull); // percentual não (evita ÷0)
     });
 
+    test('limit devolve só os N mais recentes, com diff correto no corte', () {
+      final input = [
+        day('2026-07-01', 5.00),
+        day('2026-07-02', 5.10),
+        day('2026-07-03', 5.05),
+      ];
+
+      final result = computeCloseDiffs(input, limit: 2);
+
+      expect(result, hasLength(2));
+      expect(result[0].rate.date, DateTime.parse('2026-07-03'));
+      expect(result[1].rate.date, DateTime.parse('2026-07-02'));
+      // o diff do 02 usa o fechamento do 01, que foi calculado antes do corte
+      expect(result[1].closeDiff, closeTo(0.10, 1e-9));
+    });
+
     test('ordena entradas fora de ordem antes de calcular', () {
       final input = [
         day('2026-07-03', 5.05),
