@@ -5,19 +5,19 @@ dos últimos 30 dias com a variação de fechamento (*close diff*).
 
 ## Demo & download
 
-- 🌐 **Web:** https://jvictorff.github.io/currency_exchanger/ - roda no navegador, sem instalar. Deploy automático no **GitHub Pages** com o GitHub Actions. A chave de teste vai embutida no bundle web.
-- 📱 **APK Android:** nos [Releases](https://github.com/jvictorff/currency_exchanger/releases) - instalação via *sideload*; assinado com a chave de *debug*.
+- 🌐 **Web:** https://jvictorff.github.io/currency_exchanger/ - roda no navegador. Deploy automático no **GitHub Pages** com o GitHub Actions.
+- 📱 **APK Android:** nos [Releases](https://github.com/jvictorff/currency_exchanger/releases) - instalação via *sideload*.
 
 ## Como rodar
 
-Pré-requisito: **Flutter 3.44+** (canal stable).
+Pré-requisito: **Flutter 3.44+**.
 
 ```bash
 flutter pub get
 flutter run
 ```
 
-A API key de teste já vem embutida. Para sobrescrever em build:
+A API key de teste já vem embutida, mas para sobrescrever em build:
 
 ```bash
 flutter run --dart-define=API_KEY=SUA_CHAVE
@@ -49,7 +49,7 @@ Suponho que a Action Labs trabalha bastante com MVPs; implementei uma versão **
 
 ## Ferramentas e tempo
 
-**~8h**, bem fragmentadas - estava num congresso no Rio de quarta a domingo e finalizei no retorno (dá pra ver no histórico de commits).
-Ferramentas: **Flutter/Dart** + **Claude (Anthropic)** como par de programação, **VS Code** como IDE e **GitKraken** para controle do git.
+Foram 8 horas bem fragmentadas pois estava num congresso no Rio de quarta a domingo e finalizei no retorno (Deixei o histórico de commit de todo o processo).
+Ferramentas: **Flutter/Dart** + **Claude (Anthropic)** como par de programação, **VS Code** como IDE e **GitKraken** para controle do git. Gemini para fazer o ícone do app.
 Usei a IA para escrever os **testes** (unitários e de widget), revisar
 **vulnerabilidades**/pontos que eu deixaria passar, a **lógica do close diff** (da onde saiu a ideia da ordenação prévia.) e a **lista em slivers**. Conduzi as decisões de arquitetura e revisão crítica inclusive **cortando** o que veio a mais (`Result`, hierarquia dupla de erro, interfaces) por ser over-engineering para o escopo, e ajustando pontos como o corte em 30 dias e a lista preguiçosa.
