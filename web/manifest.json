@@ -1,6 +1,6 @@
 {
-    "name": "currency_exchanger",
-    "short_name": "currency_exchanger",
+    "name": "BRL Exchange Rate",
+    "short_name": "BRL Exchange",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
