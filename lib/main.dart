@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 
+import 'core/di/injection.dart';
+import 'core/theme/app_theme.dart';
+import 'features/exchange/presentation/pages/exchange_page.dart';
+
 void main() {
-  runApp(const MainApp());
+  setupDependencies();
+  runApp(const CurrencyExchangerApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class CurrencyExchangerApp extends StatelessWidget {
+  const CurrencyExchangerApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      title: 'BRL Exchange Rate',
+      debugShowCheckedModeBanner: false,
+      theme: buildAppTheme(),
+      home: const ExchangePage(),
     );
   }
 }
