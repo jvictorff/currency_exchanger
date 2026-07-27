@@ -3,6 +3,11 @@
 App Flutter de câmbio do Real (BRL) contra outras moedas: taxa atual + histórico
 dos últimos 30 dias com a variação de fechamento (*close diff*).
 
+## Demo & download
+
+- 🌐 **Web:** https://jvictorff.github.io/currency_exchanger/ - roda no navegador, sem instalar. Deploy automático no **GitHub Pages** com o GitHub Actions. A chave de teste vai embutida no bundle web.
+- 📱 **APK Android:** nos [Releases](https://github.com/jvictorff/currency_exchanger/releases) - instalação via *sideload*; assinado com a chave de *debug*.
+
 ## Como rodar
 
 Pré-requisito: **Flutter 3.44+** (canal stable).
@@ -28,15 +33,15 @@ flutter test
 
 Camadas *feature-first*, dimensionadas ao escopo:
 
-- **`data/`** — datasource (Dio + interceptors de auth/log), DTOs, repositório
-- **`domain/`** — entidades e a lógica do *close diff*
-- **`presentation/`** — Cubits (estados) + UI
+- **`data/`** - datasource (Dio + interceptors de auth/log), DTOs, repositório
+- **`domain/`** - entidades e a lógica do *close diff*
+- **`presentation/`** - Cubits (estados) + UI
 
 Base: **Cubit** (estado), **get_it** (DI), **Equatable** (igualdade sem codegen) e erro tipado (`sealed Failure`) lançado na camada de dados e capturado no Cubit.
 
 ## Testes
 
-`flutter test` — 16 testes: lógica do *close diff* (casos de borda), Cubits (loading/loaded/error) e widget (busca, erro, validação de código).
+`flutter test` - 16 testes: lógica do *close diff* (casos de borda), Cubits (loading/loaded/error) e widget (busca, erro, validação de código).
 
 ## Escopo: MVP vs. este projeto
 
@@ -44,7 +49,7 @@ Suponho que a Action Labs trabalha bastante com MVPs; implementei uma versão **
 
 ## Ferramentas e tempo
 
-**~8h**, bem fragmentadas — estava num congresso no Rio de quarta a domingo e finalizei no retorno (dá pra ver no histórico de commits).
+**~8h**, bem fragmentadas - estava num congresso no Rio de quarta a domingo e finalizei no retorno (dá pra ver no histórico de commits).
 Ferramentas: **Flutter/Dart** + **Claude (Anthropic)** como par de programação, **VS Code** como IDE e **GitKraken** para controle do git.
 Usei a IA para escrever os **testes** (unitários e de widget), revisar
-**vulnerabilidades**/pontos que eu deixaria passar, a **lógica do close diff** (a ideia de ordenar por data antes de calcular saiu dessa troca) e a **lista em slivers**. Conduzi as decisões de arquitetura e revisão crítica inclusive **cortando** o que veio a mais (`Result`, hierarquia dupla de erro, interfaces) por ser over-engineering para o escopo, e ajustando pontos como o corte em 30 dias e a lista preguiçosa.
+**vulnerabilidades**/pontos que eu deixaria passar, a **lógica do close diff** (da onde saiu a ideia da ordenação prévia.) e a **lista em slivers**. Conduzi as decisões de arquitetura e revisão crítica inclusive **cortando** o que veio a mais (`Result`, hierarquia dupla de erro, interfaces) por ser over-engineering para o escopo, e ajustando pontos como o corte em 30 dias e a lista preguiçosa.
