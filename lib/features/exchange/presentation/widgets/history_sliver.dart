@@ -18,10 +18,12 @@ class HistorySliver extends StatefulWidget {
 
 class _HistorySliverState extends State<HistorySliver> {
   bool _expanded = false;
+  bool _loadedOnce = false;
 
   void _toggle() {
     setState(() => _expanded = !_expanded);
-    if (_expanded && context.read<HistoryCubit>().state is HistoryInitial) {
+    if (_expanded && !_loadedOnce) {
+      _loadedOnce = true;
       context.read<HistoryCubit>().load(widget.currency);
     }
   }
