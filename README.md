@@ -42,14 +42,3 @@ Base: **Cubit** (estado), **get_it** (DI), **Equatable** (igualdade sem codegen)
 ## Testes
 
 `flutter test` - 16 testes: lógica do *close diff* (casos de borda), Cubits (loading/loaded/error) e widget (busca, erro, validação de código).
-
-## Escopo: MVP vs. este projeto
-
-Suponho que a Action Labs trabalha bastante com MVPs; implementei uma versão **mais estruturada** do que um MVP exigiria (camadas data/domain/presentation, DI, erro tipado) para demonstrar como organizo projetos feitos para **crescer**. Num MVP de prazo curto eu poderia enxugar algumas camadas (ex.: fundir datasource+repositório) ou usar algumas libs de codegen para acelerar o desenvolvimento como freezed.
-
-## Ferramentas e tempo
-
-Foram 8 horas bem fragmentadas pois estava num congresso no Rio de quarta a domingo e finalizei no retorno (Deixei o histórico de commit de todo o processo).
-Ferramentas: **Flutter/Dart** + **Claude (Anthropic)** como par de programação, **VS Code** como IDE e **GitKraken** para controle do git. Gemini para fazer o ícone do app.
-Usei a IA para escrever os **testes** (unitários e de widget), revisar
-**vulnerabilidades**/pontos que eu deixaria passar, a **lógica do close diff** (da onde saiu a ideia da ordenação prévia.) e a **lista em slivers**. Conduzi as decisões de arquitetura e revisão crítica inclusive **cortando** o que veio a mais (`Result`, hierarquia dupla de erro, interfaces) por ser over-engineering para o escopo, e ajustando pontos como o corte em 30 dias e a lista preguiçosa.
